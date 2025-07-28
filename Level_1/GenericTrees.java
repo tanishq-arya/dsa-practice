@@ -233,6 +233,45 @@ class GenericTrees {
         }
     }
 
+
+    // Using Size of level - ** Best Time:O(n), Space:O(n) for res
+    private static void LevelOrderZigZagTraversal2(Node root) {
+        System.out.println("Level Order ZigZag Traversal2 - single Q and direction");
+ 
+        List<List<Integer>> res = new ArrayList<>();
+        if(root == null)
+            return res;
+        
+        Queue<TreeNode> q = new ArrayDeque<>();
+        q.add(root);
+
+        boolean leftToRight = true;  // Direction flag
+
+        while (!q.isEmpty()) {
+            int levelSize = q.size();
+            List<Integer> level = new ArrayList<>();
+
+            for (int i = 0; i < levelSize; i++) {
+                TreeNode node = q.remove();  // Dequeue the node
+
+                if (leftToRight) {
+                    level.add(node.val);  // Add node value from left to right
+                } else {
+                    // Add node value from right to left (add to the front)
+                    level.add(0, node.val);
+                }
+
+                // Enqueue left and right children for the next level
+                if (node.left != null) q.add(node.left);
+                if (node.right != null) q.add(node.right);
+            }
+
+            res.add(level);  // Add current level to result
+            leftToRight = !leftToRight;  // Toggle direction for the next level
+        }
+        System.out.print("Zig-Zag Traversal: " + res);
+    }
+
     // 10. Mirror a Generic Tree
     private static void mirrorTreeHelper(Node node) {
         if (node.children.size() == 0) { // base case -> leaf node
@@ -267,7 +306,6 @@ class GenericTrees {
         for (Node child: node.children) {
             removeLeafNodesHelper(child);
         }
-
     }
 
     private static void removeLeafNodes(Node root) {
@@ -304,9 +342,9 @@ class GenericTrees {
             return node;
         }
 
-        Node leafOfLastNode = linearizeTreeHelper_Efficient(node.children.get(node.children.size()-1));
-        while (node.children.size() > 1) { // Time: O(n)
-            Node lastChild = node.children.remove(node.children.size()-1);      // remove last child
+        Node leafOfLastNode = linearizeTreeHelper_Efficient(node.children.get(node.children.size()-1)); // linearize last child
+        while (node.children.size() > 1) {
+            Node lastChild = node.children.remove(node.children.size()-1);  // remove last child
             Node leafNodeOfSecondLastChild = linearizeTreeHelper_Efficient(node.children.get(node.children.size()-1));   // get secondlast child
             System.out.println("Node: " + node.data + " => make " + leafNodeOfSecondLastChild.data + " -> " + lastChild.data);
             leafNodeOfSecondLastChild.children.add(lastChild);
@@ -428,8 +466,7 @@ class GenericTrees {
         System.out.println("Distance -> " + (ptX + ptY + 2));
     }
 
-
-    // 16. AreTreesSimilar
+    // 16. Are Trees Similar
     private static boolean AreTreesSimilarHelper (Node one, Node two) {
         if (one.children.size() != two.children.size()) {
             return false;
@@ -450,7 +487,7 @@ class GenericTrees {
         System.out.println("Result -> " + result);
     }
 
-    // 17. AreTreesMirror
+    // 17. Are Trees Mirror
     private static boolean AreTreesMirrorHelper(Node node1, Node node2) {
         if (node1.children.size() != node2.children.size()) {
             return false;
@@ -586,9 +623,9 @@ class GenericTrees {
         System.out.println("==== KthLargestElement ====");
         CeilAndFloor(root, Integer.MAX_VALUE); // 1st time
         for (int i=2; i<=K; i++) {   // K-1 times
-            CeilAndFloor(root, floor);
+            CeilAndFloor(root, floor); 
         }
-        int result = floor;
+        int result = floor; // floor has kth largest value
         System.out.println("\nKthLargest  -> " + result);
     }
     
@@ -597,14 +634,14 @@ class GenericTrees {
     private static int maxSum = Integer.MIN_VALUE;
     private static Node maxSumNode = null;
 
-    private static int MaxSubtreeSumNodeHelper (Node node) {
+    private static int MaxSubtreeSumNodeHelper (Node node) { // Time:O(N)
         int childSum = 0;
         for (Node child: node.children) {
             childSum += MaxSubtreeSumNodeHelper(child);
         }
         int nodeSum = childSum + node.data;
 
-        // Update max sum Node
+        // Update max sum Node - check in postorder
         if (nodeSum > maxSum) {
             maxSum = nodeSum;
             maxSumNode = node;
@@ -667,7 +704,7 @@ class GenericTrees {
             this.node = node;
             this.state = -1;
         }
-    } 
+    }
     private static void IterativeTraversal (Node root) {
         System.out.println("==== IterativeTraversal ====");
         Stack<Pair> st = new Stack<>();
