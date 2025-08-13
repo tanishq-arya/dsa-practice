@@ -666,7 +666,7 @@ class GenericTrees {
     private static int diameter = 0;
     private static int DiameterOfTreeHelper (Node node) {
         if (node.children.size() == 0) {
-            return 0;
+            return 0; // 0 edges
         }
 
         int maxHeight = -1;
