@@ -240,9 +240,9 @@ class GenericTrees {
  
         List<List<Integer>> res = new ArrayList<>();
         if(root == null)
-            return res;
+            return;
         
-        Queue<TreeNode> q = new ArrayDeque<>();
+        Queue<Node> q = new ArrayDeque<>();
         q.add(root);
 
         boolean leftToRight = true;  // Direction flag
@@ -252,18 +252,17 @@ class GenericTrees {
             List<Integer> level = new ArrayList<>();
 
             for (int i = 0; i < levelSize; i++) {
-                TreeNode node = q.remove();  // Dequeue the node
+                Node node = q.remove();  // Dequeue the node
 
                 if (leftToRight) {
-                    level.add(node.val);  // Add node value from left to right
+                    level.add(node.data);  // Add node value from left to right
                 } else {
                     // Add node value from right to left (add to the front)
-                    level.add(0, node.val);
+                    level.add(0, node.data);
                 }
 
                 // Enqueue left and right children for the next level
-                if (node.left != null) q.add(node.left);
-                if (node.right != null) q.add(node.right);
+                q.addAll(node.children);
             }
 
             res.add(level);  // Add current level to result
